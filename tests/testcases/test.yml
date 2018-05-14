@@ -1,0 +1,25 @@
+- config:
+    name: integral-api
+    variables:
+        - secret_key: 'iOS/10.3'
+    request:
+        base_url: https://boss-api.2dfire.com/integral-api
+        headers:
+            isTest: true,
+            sessionId: 123,
+            version: sso
+
+- test:
+    name: query_top_banner
+    request:
+        url: /market_center/v1/query_top_banner
+        method: POST
+        headers:
+            aaa: 123
+        json:
+            app_version: 5.6.62,
+            device_id: 1CC2CA32CA7C401F82FE2C41AC4E33F9,
+            entityId: 00148248
+            sign: ${get_2dfire_sign($secret_key, $json)}
+    validate:
+        - {"check": "code", "comparator": "eq", "expect": 1}

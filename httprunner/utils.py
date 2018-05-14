@@ -27,14 +27,17 @@ def gen_random_string(str_len):
     return ''.join(
         random.choice(string.ascii_letters + string.digits) for _ in range(str_len))
 
+
 def gen_md5(*str_args):
     return hashlib.md5("".join(str_args).encode('utf-8')).hexdigest()
+
 
 def get_sign(*args):
     content = ''.join(args).encode('ascii')
     sign_key = SECRET_KEY.encode('ascii')
     sign = hmac.new(sign_key, content, hashlib.sha1).hexdigest()
     return sign
+
 
 def remove_prefix(text, prefix):
     """ remove prefix from text
@@ -45,7 +48,6 @@ def remove_prefix(text, prefix):
 
 
 class FileUtils(object):
-
     @staticmethod
     def _check_format(file_path, content):
         """ check testcase format if valid
@@ -206,6 +208,7 @@ def query_json(json_content, query, delimiter='.'):
 
     return json_content
 
+
 def get_uniform_comparator(comparator):
     """ convert comparator alias to uniform name
     """
@@ -228,15 +231,16 @@ def get_uniform_comparator(comparator):
     elif comparator in ["len_gt", "count_gt", "length_greater_than", "count_greater_than"]:
         return "length_greater_than"
     elif comparator in ["len_ge", "count_ge", "length_greater_than_or_equals", \
-        "count_greater_than_or_equals"]:
+                        "count_greater_than_or_equals"]:
         return "length_greater_than_or_equals"
     elif comparator in ["len_lt", "count_lt", "length_less_than", "count_less_than"]:
         return "length_less_than"
     elif comparator in ["len_le", "count_le", "length_less_than_or_equals", \
-        "count_less_than_or_equals"]:
+                        "count_less_than_or_equals"]:
         return "length_less_than_or_equals"
     else:
         return comparator
+
 
 def deep_update_dict(origin_dict, override_dict):
     """ update origin dict with override dict recursively
@@ -259,11 +263,13 @@ def deep_update_dict(origin_dict, override_dict):
 
     return origin_dict
 
+
 def is_function(tup):
     """ Takes (name, object) tuple, returns True if it is a function.
     """
     name, item = tup
     return isinstance(item, types.FunctionType)
+
 
 def is_variable(tup):
     """ Takes (name, object) tuple, returns True if it is a variable.
@@ -283,10 +289,12 @@ def is_variable(tup):
 
     return True
 
+
 def get_imported_module(module_name):
     """ import module and return imported module
     """
     return importlib.import_module(module_name)
+
 
 def get_imported_module_from_file(file_path):
     """ import module from python file path and return imported module
@@ -301,6 +309,7 @@ def get_imported_module_from_file(file_path):
 
     return imported_module
 
+
 def filter_module(module, filter_type):
     """ filter functions or variables from import module
     @params
@@ -310,6 +319,7 @@ def filter_module(module, filter_type):
     filter_type = is_function if filter_type == "function" else is_variable
     module_functions_dict = dict(filter(filter_type, vars(module).items()))
     return module_functions_dict
+
 
 def search_conf_item(start_path, item_type, item_name):
     """ search expected function or variable recursive upward
@@ -339,6 +349,7 @@ def search_conf_item(start_path, item_type, item_name):
 
     return search_conf_item(dir_path, item_type, item_name)
 
+
 def lower_dict_keys(origin_dict):
     """ convert keys in dict to lower case
     e.g.
@@ -352,6 +363,7 @@ def lower_dict_keys(origin_dict):
         key.lower(): value
         for key, value in origin_dict.items()
     }
+
 
 def lower_config_dict_key(config_dict):
     """ convert key in config dict to lower case, convertion will occur in three places:
@@ -372,6 +384,7 @@ def lower_config_dict_key(config_dict):
 
     return config_dict
 
+
 def convert_to_order_dict(map_list):
     """ convert mapping in list to ordered dict
     @param (list) map_list
@@ -390,6 +403,7 @@ def convert_to_order_dict(map_list):
         ordered_dict.update(map_dict)
 
     return ordered_dict
+
 
 def update_ordered_dict(ordered_dict, override_mapping):
     """ override ordered_dict with new mapping
@@ -414,6 +428,7 @@ def update_ordered_dict(ordered_dict, override_mapping):
 
     return new_ordered_dict
 
+
 def override_variables_binds(variables, new_mapping):
     """ convert variables in testcase to ordered mapping, with new_mapping overrided
     """
@@ -429,8 +444,8 @@ def override_variables_binds(variables, new_mapping):
         new_mapping
     )
 
-def print_output(outputs):
 
+def print_output(outputs):
     if not outputs:
         return
 
@@ -466,6 +481,7 @@ def print_output(outputs):
 
     logger.log_debug(content)
 
+
 def create_scaffold(project_path):
     if os.path.isdir(project_path):
         folder_name = os.path.basename(project_path)
@@ -497,6 +513,7 @@ def create_scaffold(project_path):
 
     logger.color_print(msg, "BLUE")
 
+
 def load_dot_env_file(path):
     """ load .env file and set to os.environ
     """
@@ -516,6 +533,7 @@ def load_dot_env_file(path):
             os.environ[variable] = value
             logger.log_debug("Loaded variable: {}".format(variable))
 
+
 def validate_json_file(file_list):
     """ validate JSON testset format
     """
@@ -533,6 +551,7 @@ def validate_json_file(file_list):
                 raise SystemExit(e)
 
         print("OK")
+
 
 def prettify_json_file(file_list):
     """ prettify JSON testset format
@@ -560,6 +579,7 @@ def prettify_json_file(file_list):
 
         print("success: {}".format(outfile))
 
+
 def get_python2_retire_msg():
     retire_day = datetime(2020, 1, 1)
     today = datetime.now()
@@ -571,3 +591,27 @@ def get_python2_retire_msg():
         retire_msg = "Python 2 has been retired, you should move to Python 3."
 
     return retire_msg
+
+
+def get_2dfire_sign(params):
+    keys = list(params.keys())
+    print(keys)
+    keys.sort()
+
+    query = []
+
+    for key in keys:
+        if key not in ("sign", "method", 'appKey', "v", "format", "timestamp"):
+            value = params.get(key)
+            if value:
+                query.append(key)
+                query.append(value)
+
+    return md5encode("".join(query) + SECRET_KEY)
+
+
+def md5encode(origin):
+    m2 = hashlib.md5()
+    m2.update(origin.encode("utf8"))
+    print("签名：" + m2.hexdigest())
+    return m2.hexdigest()
